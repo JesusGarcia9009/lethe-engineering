@@ -38,3 +38,7 @@ Thumbs.db
 # Secrets
 .env
 *.key
+
+# MCP publisher CLI binary (downloaded, not source)
+mcp-publisher.exe
+.mcp_publisher_token

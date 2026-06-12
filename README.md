@@ -1,6 +1,6 @@
 # LETHE
 
-<!-- mcp-name: io.github.jesusgarcia9009/lethe -->
+<!-- mcp-name: io.github.JesusGarcia9009/lethe -->
 
 **Live Ephemeral Token & History Engine** — a model-agnostic context garbage collector for long-running LLM agents.
 

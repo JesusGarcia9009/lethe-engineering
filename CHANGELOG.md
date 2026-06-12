@@ -14,13 +14,26 @@ una release con tests.
 
 ## [Unreleased]
 
-- ✅ Published to **PyPI**: `pip install "lethe-llm-context[mcp]"` — verified installing from
-  PyPI in a clean environment. / Publicado en **PyPI**, verificado en entorno limpio.
+_Next: add GitHub topics, publish GitHub Releases; then multi-provider, ensemble curator,
+embeddings._
+_Próximo: añadir GitHub topics, publicar Releases; luego multi-proveedor, ensamble, embeddings._
 
-_Next: list on the MCP registry, add GitHub topics, publish GitHub Releases; then
-multi-provider, ensemble curator, embeddings._
-_Próximo: listar en el MCP registry, añadir GitHub topics, publicar Releases; luego
-multi-proveedor, ensamble, embeddings._
+---
+
+## [0.6.2] — MCP registry listing / Publicación en el MCP registry — 2026-06-12
+
+### Fixed / Corregido
+- `server.json` migrated to schema `2025-12-11` (camelCase fields) and trimmed the description
+  to the 100-char registry limit. / `server.json` migrado al schema `2025-12-11` y descripción
+  recortada al límite de 100 caracteres.
+- `mcp-name` annotation in the README now matches the exact namespace case
+  (`io.github.JesusGarcia9009/lethe`), satisfying PyPI package-ownership validation. /
+  La anotación `mcp-name` ahora coincide en mayúsculas con el namespace, validando la propiedad
+  del paquete en PyPI.
+
+### Added / Añadido
+- ✅ Published to PyPI and listed on the official **MCP registry**. / Publicado en PyPI y
+  listado en el **MCP registry** oficial.
 
 ---
 
