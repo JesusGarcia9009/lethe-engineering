@@ -53,7 +53,9 @@ Each milestone ships as a tagged release. Full notes in [`CHANGELOG.md`](CHANGEL
 | `v0.2.0` | B — Heuristic Engine | Curator + Scheduler + Manager: score & evict under budget | ✅ |
 | `v0.3.0` | C — Compactor | Summarize finished runs into dense notes | ✅ |
 | `v0.4.0` | D — Archivist & Paging | Lossless paging + recall + needle test (**1721→197 tok, ~89% ↓**) | ✅ |
-| _next_ | E — Visualizer + Claude | Live console view + real Claude adapter | 🚧 |
+| `v0.5.0` | E — Visualizer + Claude | Live console view + real Claude adapter + runnable demos | ✅ |
+
+🎉 **Vertical slice complete.** Next phases (multi-provider, ensemble, embeddings, MCP) each get their own spec → plan → release cycle.
 
 See the design and plan:
 - `docs/specs/2026-06-12-lethe-vertical-slice-design.md` — approved design
@@ -63,7 +65,8 @@ See the design and plan:
 ### Quickstart (no API key needed)
 
 ```bash
-python -m pytest -q          # run the full test suite, including the needle test
+python -m pytest -q                  # run the full test suite, including the needle test
+python -m lethe.examples.fake_loop   # WATCH it work: live view, blocks paging out, budget held
 ```
 
 ### Real Claude demo
@@ -129,7 +132,8 @@ Consulta el diseño y el plan:
 ### Inicio rápido (sin API key)
 
 ```bash
-python -m pytest -q          # corre toda la suite de tests, incluida la prueba de la aguja
+python -m pytest -q                  # corre toda la suite, incluida la prueba de la aguja
+python -m lethe.examples.fake_loop   # VELO funcionar: vista en vivo, bloques paginándose, presupuesto sostenido
 ```
 
 ### Demo con Claude real

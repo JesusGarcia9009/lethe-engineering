@@ -23,7 +23,7 @@ class Archivist:
         self.store.events("page_out", {"id": block.id, "handle": block.handle})
         label = block.meta.get("label", f"{block.kind} @step{block.created_step}")
         return Block(id=f"stub-{block.id}", role=block.role, kind="text",
-                     content=f"[paged: {label} · handle={block.handle}]",
+                     content=f"[paged: {label} | handle={block.handle}]",
                      created_step=block.created_step,
                      handle=block.handle, meta={"stub_for": block.id})
 

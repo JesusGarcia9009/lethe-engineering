@@ -14,8 +14,29 @@ una release con tests.
 
 ## [Unreleased]
 
-_Next: Milestone E — live console visualizer + real Claude adapter._
-_Próximo: Milestone E — visualizador en vivo + adaptador real de Claude._
+_Vertical slice complete. Next phases — multi-provider, ensemble curator, embeddings, MCP —
+each get their own spec → plan → release cycle._
+_Corte vertical completo. Próximas fases — multi-proveedor, ensamble, embeddings, MCP — cada
+una con su propio ciclo spec → plan → release._
+
+---
+
+## [0.5.0] — Milestone E: Visualizer & Real Claude / Visualizador y Claude Real — 2026-06-12
+
+> **EN:** You can now see it work and run it for real. A read-only live console view shows
+> blocks paging out and the budget bar holding, plus the real Anthropic adapter. **ES:** Ya
+> se puede ver funcionar y correr de verdad. Una vista en vivo (solo lectura) muestra los
+> bloques paginándose y la barra de presupuesto sostenida, más el adaptador real de Anthropic.
+
+### Added / Añadido
+- `viz/console.py`: `render_frame` — live working-set view with state tags
+  (`ACTIVE`/`WARM`/`NOTE`/`[paged]`/`PIN`) and a budget bar (ASCII-safe for Windows).
+- `AnthropicAdapter`: real Claude via the `anthropic` SDK, with cached per-text token
+  counting and an offline fallback. Imports without the SDK installed.
+- `examples/fake_loop.py`: a runnable **no-API-key** demo that prints the live view each step.
+- `examples/claude_loop.py`: the same loop against real Claude.
+
+### Marks the completion of the vertical slice. / Marca el fin del corte vertical.
 
 ---
 
@@ -88,7 +109,8 @@ _Próximo: Milestone E — visualizador en vivo + adaptador real de Claude._
 - `Store` interface, `MemoryStore` with lexical search, and the `Note` type.
 - Approved design spec and task-by-task implementation plan under `docs/`.
 
-[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.5.0
 [0.4.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.4.0
 [0.3.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.3.0
 [0.2.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.2.0
