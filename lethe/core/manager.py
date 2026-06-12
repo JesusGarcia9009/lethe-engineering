@@ -1,10 +1,19 @@
 from __future__ import annotations
 
+import re
+
 from lethe.core.block import Block, Message, BlockState
 from lethe.core.scheduler import Scheduler, Thresholds
 from lethe.agents.curator import Curator
+from lethe.agents.archivist import Archivist
 from lethe.adapters.base import ProviderAdapter
 from lethe.stores.memory import MemoryStore
+
+_HANDLE_RE = re.compile(r"handle=([0-9a-f]{4})")
+
+
+def _is_stub(b: Block) -> bool:
+    return bool(b.meta.get("stub_for"))
 
 
 class Session:
@@ -13,31 +22,62 @@ class Session:
         self.goal = goal
         self.subgoal = subgoal
         self.blocks: list[Block] = []
+        self.archivist = Archivist(cm.store)
         self.step = 0
         self._evicted = 0
         self._faults = 0
+        # honest baseline: every distinct real block counted once, at full size
+        self._seen_tokens: dict[str, int] = {}
 
     def add(self, block: Block) -> None:
         if block.tokens is None:
             block.tokens = self.cm.agent.token_counter.count([block])
+        self._seen_tokens[block.id] = block.tokens
         self.blocks.append(block)
         self.step = max(self.step, block.created_step)
         if self.cm.should_trigger(self.step):
             self._gc()
 
     def _gc(self) -> None:
-        kept, evicted = self.cm.scheduler.plan(
-            self.blocks, now_step=self.step, goal=self.goal)
-        for b in evicted:
-            b.state = BlockState.PAGED
-            self.cm.store.put(b)
-            self.cm.store.events("page_out", {"id": b.id})
-        self._evicted += len(evicted)
-        self.blocks = kept
+        target = self.cm.scheduler.target_tokens()
+        for _ in range(50):                       # bounded: always terminates
+            kept, evicted = self.cm.scheduler.plan(
+                self.blocks, now_step=self.step, goal=self.goal)
+            if not evicted:
+                break
+            new_blocks = list(kept)
+            for b in evicted:
+                if _is_stub(b):
+                    # content already safe in the store; just drop the stale stub
+                    self.cm.store.events("stub_drop", {"handle": b.handle})
+                    continue
+                stub = self.archivist.page_out(b)
+                new_blocks.append(stub)
+                self._evicted += 1
+            self.blocks = new_blocks
+            if self.cm.agent.token_counter.count(self.blocks) <= target:
+                break
 
     def render(self) -> list[Message]:
         self._gc()
         return [Message(role=b.role, blocks=[b]) for b in self.blocks]
+
+    def observe(self, response) -> None:
+        """Record handles the model referenced and page those blocks back in."""
+        for h in set(_HANDLE_RE.findall(response.text)):
+            block = self.archivist.page_fault(h)
+            if block and not any(b.id == block.id for b in self.blocks):
+                self.blocks.append(block)
+                self._faults += 1
+                # drop the now-redundant stub for this block
+                self.blocks = [b for b in self.blocks
+                               if b.meta.get("stub_for") != block.id]
+
+    def recall(self, query_or_handle: str) -> Block | None:
+        if re.fullmatch(r"[0-9a-f]{4}", query_or_handle):
+            return self.archivist.page_fault(query_or_handle)
+        hits = self.archivist.recall(query_or_handle)
+        return hits[0] if hits else None
 
     def pin(self, block_id: str) -> None:
         for b in self.blocks:
@@ -53,16 +93,10 @@ class Session:
         return {
             "step": self.step,
             "tokens_with_lethe": self.cm.agent.token_counter.count(self.blocks),
-            "tokens_without_lethe": self._tokens_without(),
+            "tokens_without_lethe": sum(self._seen_tokens.values()),
             "evicted": self._evicted,
             "faults": self._faults,
         }
-
-    def _tokens_without(self) -> int:
-        # every block ever added: resident working set + everything paged to the store
-        resident = self.cm.agent.token_counter.count(self.blocks)
-        paged = sum(b.tokens or 0 for b in self.cm.store._by_id.values())
-        return resident + paged
 
 
 class ContextManager:
