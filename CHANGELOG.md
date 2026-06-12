@@ -12,13 +12,21 @@ una release con tests.
 
 ---
 
-## [Unreleased] — Milestone D: Archivist & Paging / Archivista y Paginación 🚧
+## [Unreleased]
 
-> **EN:** The lossless paging layer. Cold blocks are written to an external store and
-> replaced in context by a one-line stub; anything can be recalled later by handle or by
-> lexical search. **ES:** La capa de paginación sin pérdida. Los bloques fríos se guardan en
-> un almacén externo y se reemplazan en contexto por un stub de una línea; todo se puede
-> recuperar después por handle o por búsqueda léxica.
+_Next: Milestone E — live console visualizer + real Claude adapter._
+_Próximo: Milestone E — visualizador en vivo + adaptador real de Claude._
+
+---
+
+## [0.4.0] — Milestone D: Archivist & Paging / Archivista y Paginación — 2026-06-12
+
+> **EN:** The lossless paging layer, and the proof it works. Cold blocks are written to an
+> external store and replaced in context by a one-line stub; anything can be recalled later
+> by handle or by lexical search. **ES:** La capa de paginación sin pérdida, y la prueba de
+> que funciona. Los bloques fríos se guardan en un almacén externo y se reemplazan en
+> contexto por un stub de una línea; todo se puede recuperar después por handle o por
+> búsqueda léxica.
 
 ### Added / Añadido
 - `SqliteStore` with SQLite **FTS5** lexical search (source of truth on disk).
@@ -28,10 +36,12 @@ una release con tests.
   model references by handle, `recall()`, and **honest token accounting** (each real block
   counted once at full size; stubs excluded from the savings metric).
 - Bounded GC loop that converges under budget by dropping stale stubs.
+- 🪡 **Needle-in-haystack eval** (`lethe.evals.needle`): the value proof. Plant a fact, bury
+  it under 49 noisy steps, recall it under budget.
 
-### Pending / Pendiente
-- 🪡 Needle-in-haystack eval — the value proof: plant a fact, bury it under ~50 steps of
-  noise, recall it under budget.
+### Proven / Demostrado
+- Needle recovered after 45 evictions. Tokens: **1721 → 197 (~89% reduction)**, working set
+  ≤ budget (200) the entire run.
 
 ---
 
@@ -78,7 +88,8 @@ una release con tests.
 - `Store` interface, `MemoryStore` with lexical search, and the `Note` type.
 - Approved design spec and task-by-task implementation plan under `docs/`.
 
-[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.3.0...HEAD
+[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.4.0
 [0.3.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.3.0
 [0.2.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.2.0
 [0.1.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.1.0

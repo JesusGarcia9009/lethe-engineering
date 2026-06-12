@@ -52,8 +52,8 @@ Each milestone ships as a tagged release. Full notes in [`CHANGELOG.md`](CHANGEL
 | `v0.1.0` | A — Foundation | Core types, fake adapter, stores — the testable bedrock | ✅ |
 | `v0.2.0` | B — Heuristic Engine | Curator + Scheduler + Manager: score & evict under budget | ✅ |
 | `v0.3.0` | C — Compactor | Summarize finished runs into dense notes | ✅ |
-| _next_ | D — Archivist & Paging | Lossless paging + recall + the needle test | 🚧 |
-| _next_ | E — Visualizer + Claude | Live console view + real Claude adapter | ⏳ |
+| `v0.4.0` | D — Archivist & Paging | Lossless paging + recall + needle test (**1721→197 tok, ~89% ↓**) | ✅ |
+| _next_ | E — Visualizer + Claude | Live console view + real Claude adapter | 🚧 |
 
 See the design and plan:
 - `docs/specs/2026-06-12-lethe-vertical-slice-design.md` — approved design
