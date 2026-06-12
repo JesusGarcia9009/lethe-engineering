@@ -3,7 +3,7 @@
 LETHE works in Codex through the same MCP server.
 
 ```bash
-pip install "lethe[mcp]"
+pip install "lethe-llm-context[mcp]"
 ```
 
 Then add it to your Codex config (`~/.codex/config.toml`):

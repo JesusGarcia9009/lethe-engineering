@@ -1,14 +1,35 @@
 [project]
-name = "lethe"
+name = "lethe-llm-context"
 version = "0.6.0"
-description = "Live Ephemeral Token & History Engine — context GC for LLM agents"
+description = "Context garbage collector for long-running LLM agents — offload and recall to save tokens (Claude Code & Codex via MCP)"
+readme = "README.md"
 requires-python = ">=3.12"
+license = { file = "LICENSE" }
+authors = [{ name = "Jesus Garcia", email = "47598025+JesusGarcia9009@users.noreply.github.com" }]
+keywords = ["llm", "context", "tokens", "claude", "codex", "mcp", "agents",
+            "context-management", "garbage-collector", "anthropic", "ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: The Unlicense (Unlicense)",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
 dependencies = []
 
 [project.optional-dependencies]
 anthropic = ["anthropic>=0.40"]
 mcp = ["mcp>=1.2"]
 dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/JesusGarcia9009/lethe-engineering"
+Repository = "https://github.com/JesusGarcia9009/lethe-engineering"
+Changelog = "https://github.com/JesusGarcia9009/lethe-engineering/blob/main/CHANGELOG.md"
+Issues = "https://github.com/JesusGarcia9009/lethe-engineering/issues"
 
 [build-system]
 requires = ["setuptools>=68"]

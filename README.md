@@ -15,7 +15,7 @@ recupera cuando los necesita — menos tokens en cada tarea larga.
 
 **Claude Code:**
 ```bash
-pip install "lethe[mcp]"
+pip install "lethe-llm-context[mcp]"
 claude mcp add lethe -- python -m lethe.mcp.server
 ```
 
