@@ -39,11 +39,21 @@ external store — **losslessly**, so anything can be recalled on demand.
 
 A **Scheduler** orchestrates them on triggers (every K steps, or when over budget).
 
-### Status
+### Status & progress / Estado y progreso
 
 This repository is being built as a **vertical slice first**: the full block lifecycle
 working end-to-end with a single provider (Claude), proven by a needle-in-haystack test,
 before adding multi-provider, ensemble curation, embeddings, and the MCP adapter.
+
+Each milestone ships as a tagged release. Full notes in [`CHANGELOG.md`](CHANGELOG.md).
+
+| Version | Milestone | What it does / Qué hace | Status |
+|---|---|---|---|
+| `v0.1.0` | A — Foundation | Core types, fake adapter, stores — the testable bedrock | ✅ |
+| `v0.2.0` | B — Heuristic Engine | Curator + Scheduler + Manager: score & evict under budget | ✅ |
+| `v0.3.0` | C — Compactor | Summarize finished runs into dense notes | ✅ |
+| _next_ | D — Archivist & Paging | Lossless paging + recall + the needle test | 🚧 |
+| _next_ | E — Visualizer + Claude | Live console view + real Claude adapter | ⏳ |
 
 See the design and plan:
 - `docs/specs/2026-06-12-lethe-vertical-slice-design.md` — approved design
