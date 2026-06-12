@@ -6,6 +6,30 @@
 
 ---
 
+## 🔌 Use it in Claude Code or Codex (save tokens now)
+
+LETHE ships as an **MCP server**. Two lines and your agent can offload big outputs out of its
+context and recall them on demand — fewer tokens on every long task. / LETHE viene como
+**servidor MCP**. Dos líneas y tu agente descarga outputs grandes fuera del contexto y los
+recupera cuando los necesita — menos tokens en cada tarea larga.
+
+**Claude Code:**
+```bash
+pip install "lethe[mcp]"
+claude mcp add lethe -- python -m lethe.mcp.server
+```
+
+**Codex:** add an MCP block to `~/.codex/config.toml` — see
+[`integrations/codex/mcp-config.md`](integrations/codex/mcp-config.md).
+
+Then drop in the guiding skill so it happens **automatically**:
+[`integrations/claude-code/SKILL.md`](integrations/claude-code/SKILL.md).
+
+Tools exposed: `lethe_archive` · `lethe_recall` · `lethe_status`.
+Full guide: [`integrations/claude-code/mcp-config.md`](integrations/claude-code/mcp-config.md).
+
+---
+
 ## English
 
 When an LLM agent runs a long task (tens to hundreds of steps), its context window fills
@@ -54,8 +78,9 @@ Each milestone ships as a tagged release. Full notes in [`CHANGELOG.md`](CHANGEL
 | `v0.3.0` | C — Compactor | Summarize finished runs into dense notes | ✅ |
 | `v0.4.0` | D — Archivist & Paging | Lossless paging + recall + needle test (**1721→197 tok, ~89% ↓**) | ✅ |
 | `v0.5.0` | E — Visualizer + Claude | Live console view + real Claude adapter + runnable demos | ✅ |
+| `v0.6.0` | MCP server | `lethe_archive`/`recall`/`status` for Claude Code + Codex, plus guiding skill | ✅ |
 
-🎉 **Vertical slice complete.** Next phases (multi-provider, ensemble, embeddings, MCP) each get their own spec → plan → release cycle.
+🎉 **Vertical slice complete and shipping via MCP.** Next: PyPI + MCP registry publish, then multi-provider, ensemble, and embeddings — each its own spec → plan → release cycle.
 
 See the design and plan:
 - `docs/specs/2026-06-12-lethe-vertical-slice-design.md` — approved design

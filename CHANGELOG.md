@@ -14,10 +14,35 @@ una release con tests.
 
 ## [Unreleased]
 
-_Vertical slice complete. Next phases — multi-provider, ensemble curator, embeddings, MCP —
-each get their own spec → plan → release cycle._
-_Corte vertical completo. Próximas fases — multi-proveedor, ensamble, embeddings, MCP — cada
-una con su propio ciclo spec → plan → release._
+_Next: publish to PyPI + the MCP registry, then multi-provider, ensemble curator, embeddings._
+_Próximo: publicar en PyPI + el MCP registry, luego multi-proveedor, ensamble, embeddings._
+
+---
+
+## [0.6.0] — MCP Server / Servidor MCP — 2026-06-12
+
+> **EN:** LETHE now ships to where people work. An MCP server lets Claude Code and Codex
+> offload large tool outputs out of context and recall them on demand — real token savings,
+> two-line install. **ES:** LETHE ahora llega a donde la gente trabaja. Un servidor MCP
+> permite a Claude Code y Codex descargar outputs grandes fuera del contexto y recuperarlos
+> cuando hagan falta — ahorro real de tokens, instalación en dos líneas.
+
+### Added / Añadido
+- `lethe/mcp/service.py` — `LetheMemory`: pure, tested offload service (`archive`, `recall`,
+  `status`) reusing `SqliteStore` + `Archivist`. No MCP dependency, so it is fully unit-tested.
+- `lethe/mcp/server.py` — thin **FastMCP** (stdio) server exposing `lethe_archive`,
+  `lethe_recall`, `lethe_status`. Verified to start and serve all three tools.
+- `integrations/claude-code/SKILL.md` — guiding skill so the agent offloads large outputs
+  (> ~1500 tokens) automatically.
+- Two-line install snippets for **Claude Code** and **Codex**
+  (`integrations/*/mcp-config.md`), plus a prominent README install section.
+- Optional `[mcp]` dependency extra.
+
+### Honest scope / Alcance honesto
+- MCP cannot rewrite the host's context; LETHE offers explicit offload/recall tools and a
+  skill that makes their use near-automatic. / MCP no puede reescribir el contexto del host;
+  LETHE ofrece herramientas explícitas de offload/recall y una skill que las usa casi
+  automáticamente.
 
 ---
 
@@ -109,7 +134,8 @@ una con su propio ciclo spec → plan → release._
 - `Store` interface, `MemoryStore` with lexical search, and the `Note` type.
 - Approved design spec and task-by-task implementation plan under `docs/`.
 
-[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.6.0
 [0.5.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.5.0
 [0.4.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.4.0
 [0.3.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.3.0
