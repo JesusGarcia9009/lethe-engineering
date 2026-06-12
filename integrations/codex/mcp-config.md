@@ -10,8 +10,7 @@ Then add it to your Codex config (`~/.codex/config.toml`):
 
 ```toml
 [mcp_servers.lethe]
-command = "python"
-args = ["-m", "lethe.mcp.server"]
+command = "lethe-mcp"
 
 # optional: choose where the archive lives
 [mcp_servers.lethe.env]

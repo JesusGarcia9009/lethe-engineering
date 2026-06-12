@@ -1,5 +1,7 @@
 # LETHE
 
+<!-- mcp-name: io.github.jesusgarcia9009/lethe -->
+
 **Live Ephemeral Token & History Engine** — a model-agnostic context garbage collector for long-running LLM agents.
 
 [![PyPI](https://img.shields.io/pypi/v/lethe-llm-context?color=blue)](https://pypi.org/project/lethe-llm-context/)
@@ -20,7 +22,7 @@ recupera cuando los necesita — menos tokens en cada tarea larga.
 **Claude Code:**
 ```bash
 pip install "lethe-llm-context[mcp]"
-claude mcp add lethe -- python -m lethe.mcp.server
+claude mcp add lethe -- lethe-mcp
 ```
 
 **Codex:** add an MCP block to `~/.codex/config.toml` — see

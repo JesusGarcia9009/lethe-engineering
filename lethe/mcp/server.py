@@ -33,5 +33,10 @@ def lethe_status() -> dict:
     return _mem.status()
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Console entry point: `lethe-mcp` (registered in pyproject.toml)."""
     mcp.run()
+
+
+if __name__ == "__main__":
+    main()

@@ -24,6 +24,16 @@ multi-proveedor, ensamble, embeddings._
 
 ---
 
+## [0.6.1] — MCP polish / Pulido MCP — 2026-06-12
+
+### Added / Añadido
+- `lethe-mcp` console command (entry point) — cleaner than `python -m lethe.mcp.server` and
+  the form expected by MCP registries. Install snippets and Codex config updated.
+- `server.json` for the MCP registry, and an `mcp-name` annotation in the README for PyPI
+  package-ownership validation.
+
+---
+
 ## [0.6.0] — MCP Server / Servidor MCP — 2026-06-12
 
 > **EN:** LETHE now ships to where people work. An MCP server lets Claude Code and Codex
@@ -139,7 +149,8 @@ multi-proveedor, ensamble, embeddings._
 - `Store` interface, `MemoryStore` with lexical search, and the `Note` type.
 - Approved design spec and task-by-task implementation plan under `docs/`.
 
-[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/JesusGarcia9009/lethe-engineering/compare/v0.6.1...HEAD
+[0.6.1]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.6.1
 [0.6.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.6.0
 [0.5.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.5.0
 [0.4.0]: https://github.com/JesusGarcia9009/lethe-engineering/releases/tag/v0.4.0

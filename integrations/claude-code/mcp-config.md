@@ -4,7 +4,7 @@ LETHE plugs into Claude Code as an MCP server. Two lines:
 
 ```bash
 pip install "lethe-llm-context[mcp]"
-claude mcp add lethe -- python -m lethe.mcp.server
+claude mcp add lethe -- lethe-mcp
 ```
 
 That registers a local stdio MCP server exposing three tools:
