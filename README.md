@@ -2,6 +2,10 @@
 
 **Live Ephemeral Token & History Engine** — a model-agnostic context garbage collector for long-running LLM agents.
 
+[![PyPI](https://img.shields.io/pypi/v/lethe-llm-context?color=blue)](https://pypi.org/project/lethe-llm-context/)
+[![Python](https://img.shields.io/pypi/pyversions/lethe-llm-context)](https://pypi.org/project/lethe-llm-context/)
+[![License: Unlicense](https://img.shields.io/badge/license-Unlicense-green)](LICENSE)
+
 > 🌍 This README is bilingual. [English](#english) · [Español](#español)
 
 ---

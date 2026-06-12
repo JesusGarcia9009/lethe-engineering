@@ -14,8 +14,13 @@ una release con tests.
 
 ## [Unreleased]
 
-_Next: publish to PyPI + the MCP registry, then multi-provider, ensemble curator, embeddings._
-_Próximo: publicar en PyPI + el MCP registry, luego multi-proveedor, ensamble, embeddings._
+- ✅ Published to **PyPI**: `pip install "lethe-llm-context[mcp]"` — verified installing from
+  PyPI in a clean environment. / Publicado en **PyPI**, verificado en entorno limpio.
+
+_Next: list on the MCP registry, add GitHub topics, publish GitHub Releases; then
+multi-provider, ensemble curator, embeddings._
+_Próximo: listar en el MCP registry, añadir GitHub topics, publicar Releases; luego
+multi-proveedor, ensamble, embeddings._
 
 ---
 
