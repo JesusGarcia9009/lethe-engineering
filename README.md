@@ -6,6 +6,7 @@
 
 [![PyPI](https://img.shields.io/pypi/v/lethe-llm-context?color=blue)](https://pypi.org/project/lethe-llm-context/)
 [![Python](https://img.shields.io/pypi/pyversions/lethe-llm-context)](https://pypi.org/project/lethe-llm-context/)
+[![MCP Registry](https://img.shields.io/badge/MCP_Registry-listed-1f6feb)](https://registry.modelcontextprotocol.io)
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-green)](LICENSE)
 
 > 🌍 This README is bilingual. [English](#english) · [Español](#español)
@@ -33,6 +34,43 @@ Then drop in the guiding skill so it happens **automatically**:
 
 Tools exposed: `lethe_archive` · `lethe_recall` · `lethe_status`.
 Full guide: [`integrations/claude-code/mcp-config.md`](integrations/claude-code/mcp-config.md).
+
+---
+
+## ▶️ See it work (no API key) / Míralo funcionar (sin API key)
+
+```bash
+python -m lethe.examples.mcp_demo
+```
+
+```text
+  LETHE — context garbage collector for LLM agents
+  archive big tool outputs · recall on demand · save tokens
+
+The agent runs 4 commands. Each returns a wall of text:
+
+  → build.log               857 tok in context  —archive→  stub '[paged: build.log | handle=6d48]'  handle=6d48
+  → pytest.txt              479 tok in context  —archive→  stub '[paged: pytest.txt | handle=1e56]'  handle=1e56
+  → db_dump.json            829 tok in context  —archive→  stub '[paged: db_dump.json | handle=ec02]'  handle=ec02
+  → trace.txt               414 tok in context  —archive→  stub '[paged: trace.txt | handle=d888]'  handle=d888
+
+lethe_status:  4 blocks archived, 2579 tokens moved out of context
+
+30 steps later the agent needs a buried fact. It recalls by keyword:
+
+  lethe_recall("launch_code")  →  found launch_code = 4242 (rehydrated losslessly from the archive)
+
+  Context window cost
+
+    without LETHE :  2579 tok  (everything stays resident)
+    with LETHE    :    34 tok  (only tiny stubs remain)
+    saved         :  2545 tok  (-99%)
+```
+
+This runs the **same logic the MCP tools use** — `lethe_archive` / `lethe_recall` / `lethe_status`.
+A recordable version lives in [`assets/demo.tape`](assets/demo.tape): run `vhs assets/demo.tape`
+to render an animated GIF. / Corre la **misma lógica de los tools MCP**; `vhs assets/demo.tape`
+genera un GIF animado.
 
 ---
 

@@ -14,9 +14,15 @@ una release con tests.
 
 ## [Unreleased]
 
-_Next: add GitHub topics, publish GitHub Releases; then multi-provider, ensemble curator,
-embeddings._
-_Próximo: añadir GitHub topics, publicar Releases; luego multi-proveedor, ensamble, embeddings._
+### Added / Añadido
+- `lethe.examples.mcp_demo` — a no-API-key demo that drives the real MCP-tool logic and shows
+  the token savings end to end. / Demo sin API key que ejecuta la lógica real de los tools MCP.
+- `assets/demo.tape` (VHS) to render an animated GIF of the demo, an MCP Registry badge in the
+  README, a "See it work" section, and `docs/announcements.md` with sharing drafts. /
+  Tape de VHS para el GIF, badge del MCP Registry, sección "See it work" y borradores de anuncio.
+
+_Next: multi-provider, ensemble curator, embeddings._
+_Próximo: multi-proveedor, ensamble, embeddings._
 
 ---
 
