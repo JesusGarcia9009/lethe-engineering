@@ -11,6 +11,10 @@
 
 > 🌍 This README is bilingual. [English](#english) · [Español](#español)
 
+<p align="center">
+  <img src="assets/lethe-demo.gif" alt="LETHE archives big tool outputs and recalls them on demand to save tokens" width="820">
+</p>
+
 ---
 
 ## 🔌 Use it in Claude Code or Codex (save tokens now)
@@ -68,9 +72,9 @@ lethe_status:  4 blocks archived, 2579 tokens moved out of context
 ```
 
 This runs the **same logic the MCP tools use** — `lethe_archive` / `lethe_recall` / `lethe_status`.
-A recordable version lives in [`assets/demo.tape`](assets/demo.tape): run `vhs assets/demo.tape`
-to render an animated GIF. / Corre la **misma lógica de los tools MCP**; `vhs assets/demo.tape`
-genera un GIF animado.
+Regenerate the GIF at the top with `python assets/make_gif.py` (self-contained, Pillow only); a
+[`assets/demo.tape`](assets/demo.tape) is also provided for [VHS](https://github.com/charmbracelet/vhs)
+on Linux/WSL. / El GIF de arriba se regenera con `python assets/make_gif.py` (solo Pillow).
 
 ---
 
