@@ -14,15 +14,59 @@ una release con tests.
 
 ## [Unreleased]
 
+## [0.7.0] — Compactor in the loop + hardening / Compactor en el loop + robustez — 2026-07-10
+
+### Added / Añadido
+- **Compactor wired into the GC loop.** Under budget pressure, a contiguous run of cold
+  completed blocks is now replaced by one dense consolidation note (resident) while the
+  originals are paged out losslessly — the `COMPACTED` lifecycle state now happens
+  automatically. `stats()` reports `compacted` and `notes`. / **Compactor conectado al loop:**
+  bajo presión de presupuesto, un run contiguo de bloques fríos se reemplaza por una nota
+  densa residente y los originales se paginan sin pérdida — el estado `COMPACTED` ya ocurre
+  automáticamente. `stats()` reporta `compacted` y `notes`.
+- **`never_compact_open_subgoal` guardrail.** `Scheduler.cold_run` never compacts blocks of the
+  still-open subgoal and never lets a run span a subgoal boundary; `Session.set_subgoal()`
+  advances the active subgoal. Closes a vertical-slice spec gap. / El guardarraíl nunca compacta
+  el subgoal abierto ni cruza fronteras de subgoal; `set_subgoal()` avanza el subgoal activo.
+- **Persisted `refs` citation graph.** `SqliteStore` now creates and populates the `refs(src,dst)`
+  table on every `put`, readable via `refs_of(src)`. Closes a vertical-slice spec gap. /
+  `SqliteStore` ahora crea y puebla la tabla `refs`, leíble con `refs_of(src)`.
+- **`docs/ROADMAP.md`** — honest record of what's done vs. the full engineering design (G1–G5,
+  7 phases, known gaps). / Registro honesto de lo hecho vs. el diseño completo.
+
+### Fixed / Corregido
+- **Handle collisions.** Archive handles went from 4 hex chars (~50% collision by ~300 archives,
+  which silently returned the wrong content on recall) to 8 chars, and `Archivist.page_out` now
+  allocates a handle no stored block already holds. / Los handles pasaron de 4 a 8 caracteres y
+  se garantiza que sean únicos contra el almacén, eliminando recalls que devolvían contenido
+  equivocado.
+- **`lethe_recall` crash on ordinary keywords.** SQLite FTS5 search now quotes the query as a
+  literal phrase and guards against `OperationalError`, so keywords with `:`, `"`, `AND`/`OR`/
+  `NEAR` or `*` no longer take the tool down; recall also falls back to keyword search when a
+  hex-looking word isn't a real handle. / La búsqueda FTS5 ahora entrecomilla el query y captura
+  errores, y hace fallback a búsqueda por keyword.
+- **MCP server thread safety.** `SqliteStore` opens its connection with `check_same_thread=False`
+  so the server survives FastMCP's threadpool. / Conexión SQLite compatible con el threadpool del
+  servidor MCP.
+
+### Changed / Cambiado
+- **README rewritten for honesty.** Now separates what runs today (MCP offload/recall, heuristic
+  in-loop GC, lossless paging) from the long-term vision (multi-provider, ensemble, embeddings,
+  `wrap()`), with an explicit status table. The full engineering design is framed as the roadmap,
+  not the current state. / README reescrito: separa lo que funciona hoy de la visión, con tabla
+  de estado explícita.
+
 ### Added / Añadido
 - `lethe.examples.mcp_demo` — a no-API-key demo that drives the real MCP-tool logic and shows
   the token savings end to end. / Demo sin API key que ejecuta la lógica real de los tools MCP.
 - `assets/demo.tape` (VHS) to render an animated GIF of the demo, an MCP Registry badge in the
   README, a "See it work" section, and `docs/announcements.md` with sharing drafts. /
   Tape de VHS para el GIF, badge del MCP Registry, sección "See it work" y borradores de anuncio.
+- Regression tests: unique handles across 500 archives, and FTS search with special characters
+  that must not raise. / Tests de regresión para handles únicos y búsqueda con caracteres especiales.
 
-_Next: multi-provider, ensemble curator, embeddings._
-_Próximo: multi-proveedor, ensamble, embeddings._
+_Next: wire the Compactor into the loop; then multi-provider._
+_Próximo: conectar el Compactor al loop; luego multi-proveedor._
 
 ---
 

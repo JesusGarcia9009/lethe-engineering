@@ -1,15 +1,17 @@
 from __future__ import annotations
 
 import re
+import uuid
 
 from lethe.core.block import Block, Message, BlockState
 from lethe.core.scheduler import Scheduler, Thresholds
 from lethe.agents.curator import Curator
 from lethe.agents.archivist import Archivist
+from lethe.agents.compactor import Compactor
 from lethe.adapters.base import ProviderAdapter
 from lethe.stores.memory import MemoryStore
 
-_HANDLE_RE = re.compile(r"handle=([0-9a-f]{4})")
+_HANDLE_RE = re.compile(r"handle=([0-9a-f]{4,})")
 
 
 def _is_stub(b: Block) -> bool:
@@ -23,15 +25,26 @@ class Session:
         self.subgoal = subgoal
         self.blocks: list[Block] = []
         self.archivist = Archivist(cm.store)
+        self.compactor = Compactor(cm.curator_adapter)
+        self.session_id = uuid.uuid4().hex[:8]
         self.step = 0
         self._evicted = 0
+        self._compacted = 0
+        self._notes = 0
         self._faults = 0
         # honest baseline: every distinct real block counted once, at full size
         self._seen_tokens: dict[str, int] = {}
 
+    def set_subgoal(self, subgoal: str | None) -> None:
+        """Advance the active subgoal. Blocks of the previous subgoal become
+        eligible for compaction; blocks added now are tagged with the new one."""
+        self.subgoal = subgoal
+
     def add(self, block: Block) -> None:
         if block.tokens is None:
             block.tokens = self.cm.agent.token_counter.count([block])
+        if self.subgoal is not None:
+            block.meta.setdefault("subgoal", self.subgoal)
         self._seen_tokens[block.id] = block.tokens
         self.blocks.append(block)
         self.step = max(self.step, block.created_step)
@@ -41,8 +54,16 @@ class Session:
     def _gc(self) -> None:
         target = self.cm.scheduler.target_tokens()
         for _ in range(50):                       # bounded: always terminates
+            if self.cm.agent.token_counter.count(self.blocks) <= target:
+                break
+            scores = self.cm.scheduler.score(self.blocks, self.step, self.goal)
+            run = self.cm.scheduler.cold_run(
+                self.blocks, self.step, self.goal, scores=scores,
+                open_subgoal=self.subgoal)
+            if len(run) >= 2 and self._try_compact(run):
+                continue                          # recount at top of loop
             kept, evicted = self.cm.scheduler.plan(
-                self.blocks, now_step=self.step, goal=self.goal)
+                self.blocks, now_step=self.step, goal=self.goal, scores=scores)
             if not evicted:
                 break
             new_blocks = list(kept)
@@ -55,8 +76,35 @@ class Session:
                 new_blocks.append(stub)
                 self._evicted += 1
             self.blocks = new_blocks
-            if self.cm.agent.token_counter.count(self.blocks) <= target:
-                break
+
+    def _try_compact(self, run: list[Block]) -> bool:
+        """Fold a cold run into one resident note; page the originals out losslessly."""
+        note = self.compactor.compact(run, session=self.session_id)
+        if note is None:
+            return False
+        handles = [self.archivist.compact_out(b) for b in run]
+        note_block = Block(
+            id=f"note-{note.id}", role="assistant", kind="note",
+            content=note.summary, created_step=run[-1].created_step,
+            state=BlockState.ACTIVE, tokens=note.tokens,
+            meta={"covers": handles, "note_id": note.id},
+        )
+        self.cm.store.put_note(note)
+        run_ids = {b.id for b in run}
+        new_blocks: list[Block] = []
+        inserted = False
+        for b in self.blocks:
+            if b.id in run_ids:
+                if not inserted:
+                    new_blocks.append(note_block)
+                    inserted = True
+                self._evicted += 1
+                self._compacted += 1
+            else:
+                new_blocks.append(b)
+        self.blocks = new_blocks
+        self._notes += 1
+        return True
 
     def render(self) -> list[Message]:
         self._gc()
@@ -74,8 +122,10 @@ class Session:
                                if b.meta.get("stub_for") != block.id]
 
     def recall(self, query_or_handle: str) -> Block | None:
-        if re.fullmatch(r"[0-9a-f]{4}", query_or_handle):
-            return self.archivist.page_fault(query_or_handle)
+        if re.fullmatch(r"[0-9a-f]{4,}", query_or_handle):
+            block = self.archivist.page_fault(query_or_handle)
+            if block:
+                return block
         hits = self.archivist.recall(query_or_handle)
         return hits[0] if hits else None
 
@@ -95,6 +145,8 @@ class Session:
             "tokens_with_lethe": self.cm.agent.token_counter.count(self.blocks),
             "tokens_without_lethe": sum(self._seen_tokens.values()),
             "evicted": self._evicted,
+            "compacted": self._compacted,
+            "notes": self._notes,
             "faults": self._faults,
         }
 

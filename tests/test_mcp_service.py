@@ -9,9 +9,17 @@ def mem():
 def test_archive_returns_handle_and_saving():
     m = mem()
     r = m.archive("x" * 4000, label="big.log")
-    assert len(r["handle"]) == 4
+    assert len(r["handle"]) == 8
     assert r["tokens_saved"] > 0
     assert m.recall(r["handle"]) == "x" * 4000
+
+
+def test_handles_are_unique_across_many_archives():
+    # C4 regression: 4-char handles collided ~50% by ~300 archives, silently
+    # returning the wrong content on recall. Handles must stay distinct.
+    m = mem()
+    handles = {m.archive(f"content number {i}")["handle"] for i in range(500)}
+    assert len(handles) == 500
 
 
 def test_recall_by_keyword():

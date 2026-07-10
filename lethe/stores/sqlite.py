@@ -9,12 +9,15 @@ from lethe.stores.base import Note
 
 class SqliteStore:
     def __init__(self, path: str = "./lethe.db"):
-        self.db = sqlite3.connect(path)
+        # check_same_thread=False: the MCP server serves tools from a threadpool,
+        # so the connection must be usable across threads.
+        self.db = sqlite3.connect(path, check_same_thread=False)
         self.db.execute("""CREATE TABLE IF NOT EXISTS blocks(
             id TEXT PRIMARY KEY, session TEXT, role TEXT, kind TEXT, content TEXT,
             created_step INT, pinned INT, tokens INT, state TEXT, handle TEXT, meta TEXT)""")
         self.db.execute("""CREATE TABLE IF NOT EXISTS notes(
             id TEXT PRIMARY KEY, session TEXT, summary TEXT, covers TEXT, tokens INT)""")
+        self.db.execute("CREATE TABLE IF NOT EXISTS refs(src TEXT, dst TEXT)")
         self.db.execute("""CREATE TABLE IF NOT EXISTS events(
             ts TEXT, session TEXT, kind TEXT, payload TEXT)""")
         self.db.execute("""CREATE VIRTUAL TABLE IF NOT EXISTS blocks_fts
@@ -29,6 +32,10 @@ class SqliteStore:
         self.db.execute("DELETE FROM blocks_fts WHERE id=?", (block.id,))
         self.db.execute("INSERT INTO blocks_fts(id, content) VALUES (?,?)",
                         (block.id, block.content))
+        # persist the citation graph (src cites dst), replacing this block's edges
+        self.db.execute("DELETE FROM refs WHERE src=?", (block.id,))
+        self.db.executemany("INSERT INTO refs VALUES (?,?)",
+                            [(block.id, dst) for dst in block.refs])
         self.db.commit()
 
     def _row_to_block(self, row) -> Block:
@@ -43,10 +50,24 @@ class SqliteStore:
         return self._row_to_block(row) if row else None
 
     def search(self, query: str, limit: int) -> list[Block]:
-        cur = self.db.execute(
-            "SELECT b.* FROM blocks_fts f JOIN blocks b ON b.id=f.id "
-            "WHERE blocks_fts MATCH ? LIMIT ?", (query, limit))
-        return [self._row_to_block(r) for r in cur.fetchall()]
+        q = query.strip()
+        if not q:
+            return []
+        # Quote the whole query as one FTS5 phrase so arbitrary model text —
+        # colons, quotes, AND/OR/NEAR, wildcards — is treated as literal terms
+        # and never parsed as FTS syntax (which would raise OperationalError).
+        phrase = '"' + q.replace('"', '""') + '"'
+        try:
+            cur = self.db.execute(
+                "SELECT b.* FROM blocks_fts f JOIN blocks b ON b.id=f.id "
+                "WHERE blocks_fts MATCH ? LIMIT ?", (phrase, limit))
+            return [self._row_to_block(r) for r in cur.fetchall()]
+        except sqlite3.OperationalError:
+            return []
+
+    def refs_of(self, src: str) -> list[str]:
+        cur = self.db.execute("SELECT dst FROM refs WHERE src=?", (src,))
+        return [r[0] for r in cur.fetchall()]
 
     def put_note(self, note: Note) -> None:
         self.db.execute("REPLACE INTO notes VALUES (?,?,?,?,?)",

@@ -23,7 +23,7 @@ def lethe_archive(content: str, label: str = "") -> dict:
 
 @mcp.tool()
 def lethe_recall(query_or_handle: str) -> str:
-    """Recall archived content by its 4-char handle or by keyword search."""
+    """Recall archived content by its short handle or by keyword search."""
     return _mem.recall(query_or_handle) or "[lethe: nothing found]"
 
 

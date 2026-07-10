@@ -7,7 +7,7 @@ from math import ceil
 from lethe.core.block import Block
 from lethe.agents.archivist import Archivist
 
-_HEX4 = re.compile(r"^[0-9a-f]{4}$")
+_HANDLE_RE = re.compile(r"^[0-9a-f]{4,}$")
 
 
 def simple_tokens(text: str) -> int:
@@ -39,9 +39,12 @@ class LetheMemory:
                 "label": label or "", "stub": stub.content}
 
     def recall(self, query_or_handle: str) -> str | None:
-        if _HEX4.match(query_or_handle):
+        # Try an exact handle lookup first; if that misses (or it was never a
+        # handle), fall back to keyword search so hex-looking words still resolve.
+        if _HANDLE_RE.match(query_or_handle):
             block = self.archivist.page_fault(query_or_handle)
-            return block.content if block else None
+            if block:
+                return block.content
         hits = self.archivist.recall(query_or_handle)
         return hits[0].content if hits else None
 

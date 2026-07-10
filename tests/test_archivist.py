@@ -34,3 +34,14 @@ def test_recall_lexical_finds_block():
     arch.page_out(_b("1", "the needle is 4242", step=1))
     hits = arch.recall("needle")
     assert hits and hits[0].content == "the needle is 4242"
+
+
+def test_compact_out_stores_losslessly_without_stub():
+    store = MemoryStore()
+    arch = Archivist(store)
+    b = _b("1", "the launch code is 4242", step=2)
+    handle = arch.compact_out(b)
+    assert b.state is BlockState.COMPACTED
+    assert handle and store.get(handle).content == "the launch code is 4242"
+    # recoverable by keyword too
+    assert store.search("launch", limit=5)[0].content == "the launch code is 4242"

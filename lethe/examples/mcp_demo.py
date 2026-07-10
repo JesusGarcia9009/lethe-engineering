@@ -3,7 +3,7 @@
     python -m lethe.examples.mcp_demo
 
 Simulates an agent that runs commands returning huge outputs. Without LETHE
-they pile up in the context window; with LETHE each is archived to a 4-char
+they pile up in the context window; with LETHE each is archived to a short
 handle (tiny stub stays in context) and recalled losslessly on demand.
 
 This drives the SAME logic the MCP tools `lethe_archive` / `lethe_recall` /

@@ -1,6 +1,6 @@
 [project]
 name = "lethe-llm-context"
-version = "0.6.2"
+version = "0.7.0"
 description = "Context garbage collector for long-running LLM agents — offload and recall to save tokens (Claude Code & Codex via MCP)"
 readme = "README.md"
 requires-python = ">=3.12"
