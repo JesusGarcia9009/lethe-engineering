@@ -20,13 +20,13 @@ Links to fill in:
 > build logs, test dumps, files read 30 steps ago — and every turn re-sends that bloat.
 >
 > LETHE is a small MCP server that exposes three tools — `lethe_archive`, `lethe_recall`,
-> `lethe_status`. The agent archives a huge output to a 4-char handle (a tiny stub stays in
+> `lethe_status`. The agent archives a huge output to a short handle (a tiny stub stays in
 > context) and recalls it losslessly only when it actually needs it. There's a guiding skill so
 > it happens near-automatically.
 >
 > Honest about the mechanism: an MCP server can't rewrite the host's context for you — it gives
 > the model explicit offload/recall tools and a skill that tells it when to use them. In a local
-> needle-in-haystack test that pattern cut resident tokens by ~89%.
+> needle-in-haystack test that pattern cut resident tokens by ~88%.
 >
 > Install:
 > ```
@@ -66,7 +66,7 @@ Links to fill in:
 every turn re-sends the bloat. Quality drops, cost climbs, then you hit the ceiling. 🧵
 
 2/ LETHE is an MCP server that fixes the data, not the prompt. The agent archives a huge output
-to a 4-char handle — a tiny stub stays in context — and recalls it losslessly only when needed.
+to a short handle — a tiny stub stays in context — and recalls it losslessly only when needed.
 
 3/ Three tools: `lethe_archive` · `lethe_recall` · `lethe_status`, plus a skill so it happens
 near-automatically in Claude Code / Codex.

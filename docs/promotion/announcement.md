@@ -1,6 +1,6 @@
 # Announcement drafts / Borradores de anuncio
 
-Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from the needle test.
+Copy-paste ready. Headline number: **1721 → 199 tokens (~88% reduction)** from the needle test.
 
 ---
 
@@ -11,7 +11,7 @@ Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from
 > I built **LETHE**: a context garbage collector for LLM agents. It offloads big tool
 > outputs out of context and recalls them on demand. Losslessly.
 >
-> In the needle test: **1721 → 197 tokens (~89% ↓)**, fact still recalled.
+> In the needle test: **1721 → 199 tokens (~88% ↓)**, fact still recalled.
 >
 > Works in Claude Code & Codex via MCP, two lines:
 > `pip install "lethe-llm-context[mcp]"`
@@ -26,7 +26,7 @@ Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from
 > Construí **LETHE**: un recolector de basura de contexto para agentes LLM. Descarga los
 > outputs grandes fuera del contexto y los recupera cuando hacen falta. Sin pérdida.
 >
-> En la prueba de la aguja: **1721 → 197 tokens (~89% ↓)**, el dato se recupera igual.
+> En la prueba de la aguja: **1721 → 199 tokens (~88% ↓)**, el dato se recupera igual.
 >
 > Funciona en Claude Code y Codex vía MCP, dos líneas:
 > `pip install "lethe-llm-context[mcp]"`
@@ -48,8 +48,8 @@ Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from
 > finished work, and pages cold material to an external store — **losslessly**, so nothing is
 > lost and anything can be recalled on demand.
 >
-> In a needle-in-a-haystack test, a fact planted at step 0 survived 45 evictions and was
-> recalled 50 steps later — while tokens dropped from **1721 to 197 (~89% reduction)**.
+> In a needle-in-a-haystack test, a fact planted at step 0 survived dozens of evictions and was
+> recalled 50 steps later — while tokens dropped from **1721 to 199 (~88% reduction)**.
 >
 > It ships as an MCP server, so it plugs into Claude Code and Codex in two lines, and it's
 > open source (public domain) on PyPI.
@@ -72,9 +72,9 @@ Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from
 > bloque, resume el trabajo terminado y pagina el material frío a un almacén externo — **sin
 > pérdida**, de modo que nada se pierde y todo se puede recuperar.
 >
-> En una prueba de "aguja en el pajar", un dato plantado en el paso 0 sobrevivió a 45
-> expulsiones y se recuperó 50 pasos después — mientras los tokens bajaban de **1721 a 197
-> (~89% menos)**.
+> En una prueba de "aguja en el pajar", un dato plantado en el paso 0 sobrevivió a decenas de
+> expulsiones y se recuperó 50 pasos después — mientras los tokens bajaban de **1721 a 199
+> (~88% menos)**.
 >
 > Viene como servidor MCP: se conecta a Claude Code y Codex en dos líneas, y es open source
 > (dominio público) en PyPI.
@@ -86,7 +86,7 @@ Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from
 
 ## Reddit (r/LocalLLaMA, r/ClaudeAI) — EN
 
-**Title:** I built a context garbage collector for LLM agents — 89% fewer tokens on long tasks (open source, MCP for Claude Code & Codex)
+**Title:** I built a context garbage collector for LLM agents — ~88% fewer tokens on long tasks (open source, MCP for Claude Code & Codex)
 
 **Body:**
 
@@ -97,8 +97,8 @@ Copy-paste ready. Headline number: **1721 → 197 tokens (~89% reduction)** from
 > relevance to the current goal, compacts finished work into dense notes, and pages cold
 > material to a SQLite store — losslessly, recallable by handle or keyword search.
 >
-> In a needle-in-a-haystack test, a fact planted at step 0 was recalled after 45 evictions,
-> with tokens going **1721 → 197 (~89% reduction)** and the working set staying under budget
+> In a needle-in-a-haystack test, a fact planted at step 0 was recalled after dozens of evictions,
+> with tokens going **1721 → 199 (~88% reduction)** and the working set staying under budget
 > the whole run.
 >
 > It ships as an MCP server, so two lines wire it into Claude Code or Codex:

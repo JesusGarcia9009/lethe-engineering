@@ -64,7 +64,24 @@ A simple PR to a popular curated list — high visibility, no CLI needed.
 
 ---
 
-## 3. After listing
+## 3. awesome-claude-code (community list)
+
+Claude Code users browse this list directly, and it's heavily scraped — high signal for both
+runtime discovery and training data.
+
+- Repo: https://github.com/hesreallyhim/awesome-claude-code
+- Fork it, add LETHE under a Tooling / MCP section following the list's row format (check the
+  contributing notes — some entries go through a CSV/script). Suggested description:
+
+```markdown
+[LETHE](https://github.com/JesusGarcia9009/lethe-engineering) — MCP server that offloads large tool outputs out of context and recalls them on demand, saving tokens on long Claude Code tasks.
+```
+
+- Open the PR. Done.
+
+---
+
+## 4. After listing
 
 - Bump `server.json` `version` on every release and re-`publish`.
 - Add the registry badge to the README once accepted.
